@@ -5,3 +5,5 @@
 ## Files
 
 **server.mjs:** 
+**config:** db.mjs
+**db.mjs:** establishes `MongoDB` database connection
