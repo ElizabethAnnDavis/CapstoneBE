@@ -25,7 +25,7 @@ router
                 // check if user already exists, return error if so
                 const user = await User.findOne({ email });
                 if(user){
-                    return res.status(400).json({errors:[{'User Already Exists'}]});
+                    return res.status(400).json({errors:[{mgs: 'User Already Exists'}]});
                 }
 
                 user = new User({
