@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { check, validationResult } from 'express-validator';
 import User from '../../models/User.mjs';
+import UserProfile from '../../models/UserProfile.mjs';
 
 const router = express.Router();
 
@@ -23,19 +24,37 @@ router
 
             try{
                 // check if user already exists, return error if so
-                const user = await User.findOne({ email });
+                let user = await User.findOne({ email });
                 if(user){
                     return res.status(400).json({errors:[{mgs: 'User Already Exists'}]});
+                }
+
+                let result = await User.findOne().sort({ user_id: -1 });
+                if (result && result.user_id !== undefined) {
+                    req.body.user_id = result.user_id + 1;
+                } else {
+                    req.body.user_id = 0;
                 }
 
                 user = new User({
                     name,
                     email,
-                    password
+                    password,
+                    user_id: req.body.user_id
                 });
 
                 const salt = await bcrypt.genSalt(8);
                 user.password = await bcrypt.hash(password, salt);
+
+                await user.save();
+
+                const userProfile = new UserProfile({
+                    user_id: user.user_id,
+                    favs: [],
+                    posts: []
+                });
+
+                await userProfile.save();
 
                 const payload = { 
                     user: { 
@@ -50,7 +69,7 @@ router
 
             }catch(err){
                 console.error(err);
-                res.send(500).json({errors: [{msg: 'Server Error'}]});
+                res.status(500).json({errors: [{msg: 'Server Error'}]});
             }
     })
 
