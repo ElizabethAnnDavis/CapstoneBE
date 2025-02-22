@@ -20,7 +20,29 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    //.post()
+    .put(async(req, res) => {
+        try{
+            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+
+            if(!userProfile){
+                return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
+            }
+
+            if(req.body.favs){
+                userProfile.favs = req.body.favs;
+            }
+
+            if(req.body.posts){
+                userProfile.posts = req.body.posts;
+            }
+            
+            await userProfile.save();
+            res.json({ msg: 'User Profile Updated', userProfile });
+        }catch(err){
+            console.error(err);
+            res.status(500).json({errors: [{msg: 'Server Error'}]});
+        }
+    })
     .patch()
     .delete()
 
