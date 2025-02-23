@@ -90,17 +90,20 @@ router
     .route('/:user_id/post')
     .patch(async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
-            if(!userProfile){
-                return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
+            const userProfile = await UserProfile.findOne({ user_id: req.params.user_id });
+            if (!userProfile) {
+                return res.status(404).json({ errors: [{ msg: 'User Profile Not Found' }] });
             }
 
-            if(req.body.post_id !== undefined && req.body.post){
-                userProfile.posts[req.body.post_id] = req.body.post;
-            }else{
-                return res.status(400).json({ errors: [{ msg: 'Invalid Post Data' }] });
-            }
-            
+            const post_id = userProfile.posts.length > 0 ? userProfile.posts.length + 1 : 1;
+
+            const newPost = {
+                post: req.body.post,
+                post_id: post_id
+            };
+
+            userProfile.posts.push(newPost);
+
             await userProfile.save();
             res.json({ msg: 'Post Added', userProfile });
         }catch(err){
@@ -108,6 +111,30 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+
+
+router
+    .route('/:user_id/post/:post_id')
+    // .patch(async(req, res) => {
+    //     try{
+    //         const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+    //         if(!userProfile){
+    //             return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
+    //         }
+
+    //         if(req.body.post_id !== undefined && req.body.post){
+    //             userProfile.posts[req.body.post_id] = req.body.post;
+    //         }else{
+    //             return res.status(400).json({ errors: [{ msg: 'Invalid Post Data' }] });
+    //         }
+            
+    //         await userProfile.save();
+    //         res.json({ msg: 'Post Added', userProfile });
+    //     }catch(err){
+    //         console.error(err);
+    //         res.status(500).json({errors: [{msg: 'Server Error'}]});
+    //     }
+    // })
 
 
 
