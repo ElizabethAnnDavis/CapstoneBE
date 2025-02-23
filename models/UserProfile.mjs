@@ -23,7 +23,12 @@ const UserProfileSchema = new mongoose.Schema({
         }
     }],
     posts: [{
-        type: String,  // Array of strings
+        post: {
+            type: String
+        },
+        post_id: {
+            type: Number, required: true
+        }
     }]
 },
 { 
