@@ -115,26 +115,28 @@ router
 
 router
     .route('/:user_id/post/:post_id')
-    // .patch(async(req, res) => {
-    //     try{
-    //         const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
-    //         if(!userProfile){
-    //             return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
-    //         }
+    .patch(async(req, res) => {
+        try{
+            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            if(!userProfile){
+                return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
+            }
 
-    //         if(req.body.post_id !== undefined && req.body.post){
-    //             userProfile.posts[req.body.post_id] = req.body.post;
-    //         }else{
-    //             return res.status(400).json({ errors: [{ msg: 'Invalid Post Data' }] });
-    //         }
+            const post = userProfile.posts.find(p => p.post_id === parseInt(req.params.post_id));
+
+            if (!post) {
+                return res.status(404).json({ errors: [{ msg: 'Post Not Found' }] });
+            }
             
-    //         await userProfile.save();
-    //         res.json({ msg: 'Post Added', userProfile });
-    //     }catch(err){
-    //         console.error(err);
-    //         res.status(500).json({errors: [{msg: 'Server Error'}]});
-    //     }
-    // })
+            post.post = req.body.post;
+            
+            await userProfile.save();
+            res.json({ msg: 'Post Updated', userProfile });
+        }catch(err){
+            console.error(err);
+            res.status(500).json({errors: [{msg: 'Server Error'}]});
+        }
+    })
 
 
 
