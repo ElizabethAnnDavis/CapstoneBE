@@ -59,7 +59,7 @@ router
 
 router
     .route('/:user_id/fav')
-    //.get(//get all favs?)
+    .get()//get all favs?
     .patch(async(req, res) => {
         const { title, img, disc, comments } = req.body;
         try{
@@ -68,7 +68,7 @@ router
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
             }
 
-            const fav_id = userProfile.favs.length > 0 ? Math.max(...userProfile.favs.map(fav => fav.fav_id)) + 1 : 0;
+            const fav_id = userProfile.favs.length > 0 ? userProfile.favs.length + 1 : 1;
 
             userProfile.favs.push({title, img, disc, comments, fav_id});
 
@@ -83,11 +83,37 @@ router
 router
     .route('/:user_id/fav/:fav_id')
     .get()
-    .patch()
+    .patch(async(req, res) => {
+        const { title, img, disc, comments } = req.body;
+        try{
+            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            if(!userProfile){
+                return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
+            }
+
+            const fav = userProfile.favs.find(f => f.fav_id === parseInt(req.params.fav_id));
+
+            if (!fav) {
+                return res.status(404).json({ errors: [{ msg: 'Fav Not Found' }] });
+            }
+            
+            fav.title = title || fav.title;
+            fav.img = img || fav.img;
+            fav.disc = disc || fav.disc;
+            fav.comments = comments || fav.comments;
+            
+            await userProfile.save();
+            res.json({ msg: 'Post Updated', userProfile });
+        }catch(err){
+            console.error(err);
+            res.status(500).json({errors: [{msg: 'Server Error'}]});
+        }
+    })
     .delete()
 
 router
     .route('/:user_id/post')
+    .get()
     .patch(async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({ user_id: req.params.user_id });
@@ -115,6 +141,7 @@ router
 
 router
     .route('/:user_id/post/:post_id')
+    .get()
     .patch(async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
@@ -137,6 +164,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    .delete()
 
 
 
