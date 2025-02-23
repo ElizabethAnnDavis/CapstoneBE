@@ -17,6 +17,9 @@ const UserProfileSchema = new mongoose.Schema({
         },
         comments: {
             type: String,
+        },
+        fav_id:{ 
+            type: Number, required: true 
         }
     }],
     posts: [{
