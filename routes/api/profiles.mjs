@@ -249,7 +249,29 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .delete()
+    .delete(async(req, res) => {
+        try{
+            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+
+            if(!userProfile){
+                return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
+            }
+
+            const post = userProfile.posts.find(p => p.post_id === parseInt(req.params.post_id));
+
+            if (!post) {
+                return res.status(404).json({ errors: [{ msg: 'Post Not Found' }] });
+            }
+
+            userProfile.posts.splice(post, 1);
+
+            await userProfile.save();
+            res.json({ msg: 'Fav Deleted', userProfile });
+        }catch(err){
+            console.error(err);
+            res.status(500).json({errors: [{msg: 'Server Error'}]});
+        }
+    })
 
 
 
