@@ -55,7 +55,6 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .delete()
 
 router
     .route('/:user_id/fav')
@@ -141,7 +140,29 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .delete()
+    .delete(async(req, res) => {
+        try{
+            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+
+            if(!userProfile){
+                return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
+            }
+
+            const fav = userProfile.favs.find(f => f.fav_id === parseInt(req.params.fav_id));
+
+            if (!fav) {
+                return res.status(404).json({ errors: [{ msg: 'Fav Not Found' }] });
+            }
+
+            userProfile.favs.splice(fav, 1);
+
+            await userProfile.save();
+            res.json({ msg: 'Fav Deleted', userProfile });
+        }catch(err){
+            console.error(err);
+            res.status(500).json({errors: [{msg: 'Server Error'}]});
+        }
+    })
 
 router
     .route('/:user_id/post')
