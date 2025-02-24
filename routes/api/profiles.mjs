@@ -95,7 +95,20 @@ router
 
 router
     .route('/:user_id/fav/:fav_id')
-    .get()
+    // .get(async(req, res) => {
+    //     try{
+    //         const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+
+    //         if(!userProfile){
+    //             return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
+    //         }
+
+    //         res.json(userProfile.favs);
+    //     }catch(err){
+    //         console.error(err);
+    //         res.status(500).json({errors: [{msg: 'Server Error'}]});
+    //     }
+    // })
     .patch(async(req, res) => {
         const { title, img, disc, comments } = req.body;
         try{
@@ -126,7 +139,20 @@ router
 
 router
     .route('/:user_id/post')
-    .get()
+    .get(async(req, res) => {
+        try{
+            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+
+            if(!userProfile){
+                return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
+            }
+
+            res.json(userProfile.posts);
+        }catch(err){
+            console.error(err);
+            res.status(500).json({errors: [{msg: 'Server Error'}]});
+        }
+    })
     .patch(async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({ user_id: req.params.user_id });
