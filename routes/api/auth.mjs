@@ -51,11 +51,7 @@ router
                 };
 
                 // create payload obj for token validation 
-                const payload = { 
-                    user: { 
-                        id: user._id 
-                    }
-                };
+                const payload = { user: { user_id: user.user_id } };
 
                 // create, sign, and send a json web token, if there are no errors
                 jwt.sign(payload, process.env.jwtSecret, {expiresIn: 360000}, (err, token) => {

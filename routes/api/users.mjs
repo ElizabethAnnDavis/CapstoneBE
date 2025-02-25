@@ -30,11 +30,12 @@ router
                 }
 
                 let result = await User.findOne().sort({ user_id: -1 });
-                if (result && result.user_id !== undefined) {
-                    req.body.user_id = result.user_id + 1;
-                } else {
-                    req.body.user_id = 0;
-                }
+                req.body.user_id = result && result.user_id !== undefined ? result.user_id + 1 : 0;
+                // if (result && result.user_id !== undefined) {
+                //     req.body.user_id = result.user_id + 1;
+                // } else {
+                //     req.body.user_id = 0;
+                // }
 
                 user = new User({
                     name,
@@ -56,11 +57,7 @@ router
 
                 await userProfile.save();
 
-                const payload = { 
-                    user: { 
-                        id: user._id 
-                    }
-                };
+                const payload = { user: { user_id: user.user_id } };
 
                 jwt.sign(payload, process.env.jwtSecret, {expiresIn: 360000}, (err, token) => {
                     if(err) throw err;

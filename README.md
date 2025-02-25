@@ -2,11 +2,44 @@
 
 [Frontend](https://github.com/ElizabethAnnDavis/CapstoneFE)
 
+
+## Technologies
+
+- **Express**
+- **MongoDB**
+- **JavaScript**
+
+
+## Features
+
+- **Routes:**
+
+
+## Instructions
+
+- **Clone Repo:** clone [this repo](https://github.com/ElizabethAnnDavis/CapstoneBE)
+- **Store Data:** in a `.env` file, create a variables as followes: mongoURI=YOUR_CONNECTION_STRING_HERE, PORT=3000, jwtSecret=YOUR_JWT_SECRET
+- **Necessary Installs:** run `npm install`, `npm install bcryptjs`, `npm install cors`, `npm install dotenv`, `npm install express`, `npm install express-validator`, `npm install jsonwebtoken`, `npm install mongodb`, `npm install mongoose`, and `npm install nodemon`
+- **Run Program:** run `npm start` to launch this web app
+
+
+## Route Documentation
+
+
 ## Files
 
-**server.mjs:** 
-**config:** db.mjs
-**db.mjs:** establishes `MongoDB` database connection
+- **server.mjs:** 
+- **config:** db.mjs
+- **db.mjs:** establishes `MongoDB` database connection
+- **middleware:** auth.mjs
+- **auth.mjs:** 
+- **models:** User.mjs UserProfile.mjs
+- **User.mjs:** User Schema
+- **UserProfile.mjs:** User Profile Schema
+- **routes:** api: auth.mjs profiles.mjs users.mjs
+- **auth.mjs:** 
+- **profiles.mjs:**
+- **users.mjs:**
 
 
 
@@ -89,9 +122,9 @@
 
 
 
-*  ✔   %  --> Include a README file that contains a description of your application. README should include: 
+<!-- *  ✔   %  -- Include a README file that contains a description of your application. README should include: 
         - Explanations of the technologies used. 
         - Explanations of the approach taken. 
         - Usage instructions, if relevant. 
         - Unsolved problems. 
-        - List sources.
+        - List sources. -->

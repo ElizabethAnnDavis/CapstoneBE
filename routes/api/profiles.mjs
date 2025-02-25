@@ -1,14 +1,15 @@
 import express from 'express';
 import { check, validationResult } from 'express-validator';
 import UserProfile from '../../models/UserProfile.mjs';
+import auth from '../../middleware/auth.mjs';
 
 const router = express.Router();
 
 router
-    .route('/:user_id')
-    .get(async(req, res) => {
+    .route('/')
+    .get(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});//req.user.user_id
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -20,9 +21,9 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .put(async(req, res) => {
+    .put(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -57,10 +58,10 @@ router
     })
 
 router
-    .route('/:user_id/fav')
-    .get(async(req, res) => {
+    .route('/fav')
+    .get(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -72,10 +73,11 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .patch(async(req, res) => {
+    .patch(auth, async(req, res) => {
+        console.log("in the patch");
         const { title, img, disc, comments } = req.body;
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
             }
@@ -83,9 +85,9 @@ router
             const fav_id = userProfile.favs.length > 0 ? userProfile.favs.length + 1 : 1;
 
             userProfile.favs.push({title, img, disc, comments, fav_id});
-
+            console.log(userProfile.favs);
             await userProfile.save();
-            res.json({ msg: 'Favorite Added', userProfile });
+            res.json(userProfile);//{ msg: 'Favorite Added', userProfile });
         }catch(err){
             console.error(err);
             res.status(500).json({errors: [{msg: 'Server Error'}]});
@@ -93,10 +95,10 @@ router
     })
 
 router
-    .route('/:user_id/fav/:fav_id')
-    .get(async(req, res) => {
+    .route('/fav/:fav_id')
+    .get(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -114,10 +116,10 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .patch(async(req, res) => {
+    .patch(auth, async(req, res) => {
         const { title, img, disc, comments } = req.body;
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
             if(!userProfile){
                 return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
             }
@@ -131,18 +133,18 @@ router
             fav.title = title || fav.title;
             fav.img = img || fav.img;
             fav.disc = disc || fav.disc;
-            fav.comments = comments || fav.comments;
+            fav.comments = comments;// || fav.comments;
             
             await userProfile.save();
-            res.json({ msg: 'Post Updated', userProfile });
+            res.json(fav.comments);
         }catch(err){
             console.error(err);
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .delete(async(req, res) => {
+    .delete(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -165,10 +167,10 @@ router
     })
 
 router
-    .route('/:user_id/post')
-    .get(async(req, res) => {
+    .route('/post')
+    .get(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -180,9 +182,9 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .patch(async(req, res) => {
+    .patch(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({ user_id: req.params.user_id });
+            const userProfile = await UserProfile.findOne({ user_id: req.user.user_id });
             if (!userProfile) {
                 return res.status(404).json({ errors: [{ msg: 'User Profile Not Found' }] });
             }
@@ -206,10 +208,10 @@ router
 
 
 router
-    .route('/:user_id/post/:post_id')
-    .get(async(req, res) => {
+    .route('/post/:post_id')
+    .get(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -227,9 +229,9 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .patch(async(req, res) => {
+    .patch(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
             if(!userProfile){
                 return res.status(404).json({errors:[{msg: 'User Profile Not Found'}]});
             }
@@ -249,9 +251,9 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
-    .delete(async(req, res) => {
+    .delete(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.params.user_id});
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
