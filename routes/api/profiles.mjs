@@ -2,6 +2,7 @@ import express from 'express';
 import { check, validationResult } from 'express-validator';
 import UserProfile from '../../models/UserProfile.mjs';
 import auth from '../../middleware/auth.mjs';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router
     .route('/')
     .get(auth, async(req, res) => {
         try{
-            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});//req.user.user_id
+            const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
 
             if(!userProfile){
                 return res.status(404).json({errors: [{msg: 'User Profile Not Found'}]});
@@ -83,6 +84,8 @@ router
             }
 
             const fav_id = userProfile.favs.length > 0 ? userProfile.favs.length + 1 : 1;
+            //new mongoose.Types.ObjectId();
+            //userProfile.favs.length > 0 ? userProfile.favs.length + 1 : 1;
 
             userProfile.favs.push({title, img, disc, comments, fav_id});
             console.log(userProfile.favs);
@@ -183,6 +186,7 @@ router
         }
     })
     .patch(auth, async(req, res) => {
+        console.log(req.body);
         try{
             const userProfile = await UserProfile.findOne({ user_id: req.user.user_id });
             if (!userProfile) {
@@ -192,14 +196,14 @@ router
             const post_id = userProfile.posts.length > 0 ? userProfile.posts.length + 1 : 1;
 
             const newPost = {
-                post: req.body.post,
+                post: req.body.posts,
                 post_id: post_id
             };
 
             userProfile.posts.push(newPost);
 
             await userProfile.save();
-            res.json({ msg: 'Post Added', userProfile });
+            res.json(newPost);
         }catch(err){
             console.error(err);
             res.status(500).json({errors: [{msg: 'Server Error'}]});
@@ -268,7 +272,7 @@ router
             userProfile.posts.splice(post, 1);
 
             await userProfile.save();
-            res.json({ msg: 'Fav Deleted', userProfile });
+            res.json(post);
         }catch(err){
             console.error(err);
             res.status(500).json({errors: [{msg: 'Server Error'}]});
