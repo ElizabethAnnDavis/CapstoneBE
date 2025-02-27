@@ -36,6 +36,7 @@ const UserProfileSchema = new mongoose.Schema({
 }
 );
 
+UserProfileSchema.index({user_id: 1}, {unique: true});
 const UserProfile = mongoose.model('userProfile', UserProfileSchema);
 
 export default UserProfile;

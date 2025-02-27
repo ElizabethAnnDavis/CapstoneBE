@@ -8,6 +8,7 @@ const router = express.Router();
 
 router
     .route('/')
+    // get a user profile
     .get(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -22,6 +23,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // update entire user profile
     .put(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -60,6 +62,7 @@ router
 
 router
     .route('/fav')
+    // get favs
     .get(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -74,6 +77,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // update a fav object
     .patch(auth, async(req, res) => {
         console.log("in the patch");
         const { title, img, disc, comments } = req.body;
@@ -84,13 +88,10 @@ router
             }
 
             const fav_id = userProfile.favs.length > 0 ? userProfile.favs.length + 1 : 1;
-            //new mongoose.Types.ObjectId();
-            //userProfile.favs.length > 0 ? userProfile.favs.length + 1 : 1;
-
             userProfile.favs.push({title, img, disc, comments, fav_id});
             console.log(userProfile.favs);
             await userProfile.save();
-            res.json(userProfile);//{ msg: 'Favorite Added', userProfile });
+            res.json(userProfile);
         }catch(err){
             console.error(err);
             res.status(500).json({errors: [{msg: 'Server Error'}]});
@@ -99,6 +100,7 @@ router
 
 router
     .route('/fav/:fav_id')
+    // get a fav by id
     .get(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -119,6 +121,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // update fav by id
     .patch(auth, async(req, res) => {
         const { title, img, disc, comments } = req.body;
         try{
@@ -145,6 +148,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // delete fav by id
     .delete(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -171,6 +175,7 @@ router
 
 router
     .route('/post')
+    // get all posts
     .get(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -185,6 +190,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // update posts
     .patch(auth, async(req, res) => {
         console.log(req.body);
         try{
@@ -213,6 +219,7 @@ router
 
 router
     .route('/post/:post_id')
+    // get post by id
     .get(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -233,6 +240,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // update post by id
     .patch(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
@@ -255,6 +263,7 @@ router
             res.status(500).json({errors: [{msg: 'Server Error'}]});
         }
     })
+    // delete post by id
     .delete(auth, async(req, res) => {
         try{
             const userProfile = await UserProfile.findOne({user_id: req.user.user_id});
