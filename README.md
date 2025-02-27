@@ -127,6 +127,9 @@ This code is the backend of this web app. It runs in tandium with the [Frontend]
 - **users.mjs:** routes to create new users
 
 
+## Credits
+
+Thanks to **Dylan Comeau** for providing the basis for the authorization code used in the project.
 
 
 
