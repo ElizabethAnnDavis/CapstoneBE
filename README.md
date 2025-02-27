@@ -12,10 +12,10 @@ This code is the backend of this web app. It runs in tandium with the [Frontend]
 
 ### USERS
 **GET a user:**
-[A user (localhost:3000/api/auth)]
+- A user [localhost:3000/api/auth]()
 
 **POST a user:**
-[A user (localhost:3000/api/auth)]
+- A user [localhost:3000/api/auth]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "email": "Users email@email.com" (required field),
@@ -23,7 +23,7 @@ This code is the backend of this web app. It runs in tandium with the [Frontend]
 * }
 
 **POST new user:**
-[NEW user (localhost:3000/api/users)]
+- NEW user [localhost:3000/api/users]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "name": "Users Name" (required field),
@@ -37,7 +37,7 @@ This code is the backend of this web app. It runs in tandium with the [Frontend]
 - User profile [localhost:3000/api/user/profile]()
 
 **Put user profile:**
-[Update user profile (localhost:3000/api/user/profile)]
+- Update user profile [localhost:3000/api/user/profile]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "favs": { title, img, disc, comments }
@@ -45,50 +45,50 @@ This code is the backend of this web app. It runs in tandium with the [Frontend]
 * }
 
 **GET user profile favs:**
-[User profile favs (localhost:3000/api/user/profile/fav)]
+- User profile favs [localhost:3000/api/user/profile/fav]()
 
 **PATCH a user profile fav:**
-[Create user profile fav (localhost:3000/api/user/profile/fav)]
+- Create user profile fav [localhost:3000/api/user/profile/fav]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "favs": { title, img, disc, comments }
 * }
 
 **GET user profile fav by id:**
-[Get fav by id (localhost:3000/api/user/profile/fav/:fav_id)]
+- Get fav by id [localhost:3000/api/user/profile/fav/:fav_id]()
 
 **PATCH a user profile fav:**
-[Update fav by id (localhost:3000/api/user/profile/fav/:fav_id)]
+- Update fav by id [localhost:3000/api/user/profile/fav/:fav_id]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "favs": { title, img, disc, comments }
 * }
 
 **DELETE user profile fav by id:**
-[Delete fav by id (localhost:3000/api/user/profile/fav/:fav_id)]
+- Delete fav by id [localhost:3000/api/user/profile/fav/:fav_id]()
 
 **GET user posts:**
-[Get posts (localhost:3000/api/user/profile/post)]
+- Get posts [localhost:3000/api/user/profile/post]()
 
 **PATCH posts:**
-[Update posts (localhost:3000/api/user/profile/post)]
+- Update posts [localhost:3000/api/user/profile/post]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "posts": post 
 * }
 
 **GET a user post by id:**
-[Get a post by id (localhost:3000/api/user/profile/post/:post_id)]
+- Get a post by id [localhost:3000/api/user/profile/post/:post_id]()
 
 **PATCH a post by id:**
-[Update post by id (localhost:3000/api/user/profile/post/:post_id)]
+- Update post by id [localhost:3000/api/user/profile/post/:post_id]()
 ###### INCLUDE:
 * {
 * &nbsp;&nbsp;&nbsp;&nbsp; "posts": post 
 * }
 
 **DELETE user post by id:**
-[Delete post by id (localhost:3000/api/user/profile/post/:post_id)]
+- Delete post by id [localhost:3000/api/user/profile/post/:post_id]()
 
 
 ## Instructions
